@@ -53,6 +53,9 @@ from functools import wraps
 
 from dataclasses import dataclass, field
 
+from os import listdir  # to get list of file names in folder for looping
+
+
 import numpy as np
 # import scipy.constants as sci_const
 # import pandas as pd
@@ -137,9 +140,23 @@ class BeamRadius():
     date: str  # ex. 30-11-2022
     """The date of measurement with the form dd-mm-yyyy."""
 
+    def __post_init__(self):
+        """Init beam radius."""
+        filelist = self.get_filelist()
+
+    def folder(self):
+        """Return the folder of the data."""
+        day = self.date.split('-')[0]
+        return f"../{self.date}/{day}/I_SA_{self.current}A/"
+
+    def get_filelist(self):
+        """Return the list of files in the data folder for iteration."""
+        return list(listdir(self.folder()))
+
 
 def main():
     """Description of main()"""
+    print(BeamRadius(0,'30-11-2022'))
 
 
 if __name__ == '__main__':
