@@ -51,6 +51,8 @@ import logging
 import time
 from functools import wraps
 
+from dataclasses import dataclass, field
+
 import numpy as np
 # import scipy.constants as sci_const
 # import pandas as pd
@@ -124,6 +126,16 @@ cos = np.cos
 # ============================================================================
 # MAIN METHOD AND TESTING AREA
 # ============================================================================
+
+
+@dataclass
+class BeamRadius():
+    """Class to contain data related to one beam configration."""
+
+    current: int
+    """The second amplifier current in amps."""
+    date: str  # ex. 30-11-2022
+    """The date of measurement with the form dd-mm-yyyy."""
 
 
 def main():
