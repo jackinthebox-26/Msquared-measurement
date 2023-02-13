@@ -57,6 +57,7 @@ from os import listdir  # to get list of file names in folder for looping
 
 
 import numpy as np
+import tifffile as tiff  # To load tiff files
 # import scipy.constants as sci_const
 # import pandas as pd
 # import matplotlib.pyplot as plt
@@ -131,6 +132,30 @@ cos = np.cos
 # ============================================================================
 
 
+
+@dataclass
+class ProfileImage:
+    """Class to contain the camera images and related methods."""
+
+    filename: str
+    """File containing data."""
+    save_folder: str = "../30-11-2022/30/Processed/I_SA_0A/"
+    pixel_size: float = 5.2e-6
+    """Width and height of a pixel."""
+    max_offset = 50
+    image: np.array = field(init=False)
+    """Raw image data."""
+
+    def __post_init__(self):
+        """Fill in remaining data for this class."""
+        log.debug('Run post init')
+        self.image = self._load_image()
+
+    def _load_image(self):
+        """Load the data image that is a tiff."""
+        image = tiff.imread(self.filename)
+        return image
+
 @dataclass
 class BeamRadius():
     """Class to contain data related to one beam configration."""
@@ -140,9 +165,15 @@ class BeamRadius():
     date: str  # ex. 30-11-2022
     """The date of measurement with the form dd-mm-yyyy."""
 
+
     def __post_init__(self):
         """Init beam radius."""
         filelist = self.get_filelist()
+
+
+        self.w_radius_x = []
+        self.w_radius_y = []
+        self.d_lens = []
 
     def folder(self):
         """Return the folder of the data."""
